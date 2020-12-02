@@ -1,5 +1,7 @@
 package polimi.db2.gamifyDB.entities;
 import java.io.Serializable;
+import java.util.List;
+
 import javax.persistence.*;
 
 
@@ -24,6 +26,9 @@ public class User implements Serializable {
 	private String passwordSalt;
 	
 	private Boolean blocked;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userId")
+	private List<Logs> Logs;
 
 	public User(){
 	}

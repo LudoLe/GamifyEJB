@@ -49,8 +49,36 @@ public class Points implements Serializable{
 
 
 	
-	protected class PointsPK implements Serializable {
-	    /**
+	public class PointsPK implements Serializable {
+	    @Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getEnclosingInstance().hashCode();
+			result = prime * result + productId;
+			result = prime * result + userId;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			PointsPK other = (PointsPK) obj;
+			if (!getEnclosingInstance().equals(other.getEnclosingInstance()))
+				return false;
+			if (productId != other.productId)
+				return false;
+			if (userId != other.userId)
+				return false;
+			return true;
+		}
+
+		/**
 		 * 
 		 */
 		//private static final long serialVersionUID = 1L;
@@ -63,6 +91,10 @@ public class Points implements Serializable{
 	        this.userId = userId;
 	        this.productId = productId;
 	    }
+
+		private Points getEnclosingInstance() {
+			return Points.this;
+		}
 	}
 	
 }
