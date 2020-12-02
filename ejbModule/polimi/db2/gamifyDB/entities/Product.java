@@ -29,8 +29,7 @@ public class Product implements Serializable{
 	public Product(){
 	}
 	
-	public Product(int id, String name,  Image image,  int creatorId){
-		this.id = id;
+	public Product(String name,  Image image,  int creatorId){
 		this.name = name;
 		//TODO prendere Image ed estrarre estensione da puttare in ImageExt
 		this.imageExt = imageExt;

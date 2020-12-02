@@ -10,7 +10,7 @@
 		<class>polimi.db2.gamifyDB.entities.Question</class>
 		<class>polimi.db2.gamifyDB.entities.Product</class>
 		<class>polimi.db2.gamifyDB.entities.Answer</class>
-		<class>polimi.db2.gamifyDB.entities.Offensive_words</class>
+		<class>polimi.db2.gamifyDB.entities.OffensiveWords</class>
 	    <class>polimi.db2.gamifyDB.entities.Admin</class>					
 		<properties>
 			<property name="eclipselink.logging.level" value="FINE" />
