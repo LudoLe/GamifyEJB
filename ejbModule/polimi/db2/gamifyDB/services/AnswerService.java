@@ -8,6 +8,10 @@ import javax.persistence.PersistenceException;
 import javax.persistence.NonUniqueResultException;
 import it.polimi.db2.mission.entities.User;
 import it.polimi.db2.mission.exceptions.*;
+import polimi.db2.gamifyDB.entities.Answer;
+import polimi.db2.gamifyDB.entities.Question;
+import polimi.db2.gamifyDB.entities.Review;
+
 import java.util.List;
 
 @Stateless
@@ -19,21 +23,23 @@ public class AnswerService {
 	public AnswerService(){
 	}
 
-	public void createAnswer(String content, int questionId, int reviewId){
+	public int createAnswer(String content, int questionId, int reviewId) throws Exception{
 		try{
 		    Answer answer = new Answer();
-		    answer.setContent(content);
-		    answer.setquestionId(questionId);
-	        answer.setReviewId(reviewId);
+			Question question = em.createNamedQuery("Question.findById", Question.class).setParameter(1, questionId).getSingleResult();
+			Review review = em.createNamedQuery("Review.findById", Review.class).setParameter(1, reviewId).getSingleResult();
+			answer.setContent(content);
+		    answer.setQuestion(question);
+	        answer.setReview(review);
 	        em.persist(answer);
 	        em.flush();
-	        return answer.getId();
+	        return answer.getAnswerId();
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     
 	}
 	
-	public List<Answer> findAnswersByProduct(int productId){
+	public List<Answer> findAnswersByProduct(int productId) throws Exception {
 		List<Answer> answers = null;
 	try {
 		answers = em.createNamedQuery("Answer.findAnswersByProductId", Answer.class).setParameter(1, productId).getResultList();
@@ -41,10 +47,9 @@ public class AnswerService {
 	} catch (PersistenceException e) {
 		throw new Exception("Could not retrieve answers for thi product" + productId);
 	}
-	else return null;
 }
 	
-	public List<Answer> findAll(){
+	public List<Answer> findAll() throws Exception {
 		List<Answer> answers = null;
 	try {
 		answers = em.createNamedQuery("Answer.findALl", Answer.class).getResultList();
@@ -52,7 +57,6 @@ public class AnswerService {
 	} catch (PersistenceException e) {
 		throw new Exception("Could not retrieve answers");
 	}
-	else return null;
 }
 
 }
