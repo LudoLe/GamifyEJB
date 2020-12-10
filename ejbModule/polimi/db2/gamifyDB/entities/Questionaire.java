@@ -2,6 +2,8 @@ package polimi.db2.gamifyDB.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
 
@@ -17,6 +19,9 @@ public class Questionaire implements Serializable {
 	@Id
 	@Column(name="questionaire_id")
 	private int questionaireId;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date datetime;
 
 	private String image;
 
