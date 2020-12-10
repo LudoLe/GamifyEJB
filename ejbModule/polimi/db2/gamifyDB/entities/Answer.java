@@ -9,8 +9,10 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@NamedQuery(name="Answer.findAll", query="SELECT a FROM Answer a")
+@NamedQueries({
+@NamedQuery(name="Answer.findAll", query="SELECT a FROM Answer a"),
 @NamedQuery(name="Answer.findAnswersByProductId", query="SELECT a FROM Answer a JOIN a.question q WHERE q.questionaire_id=?")
+})
 public class Answer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -63,6 +65,11 @@ public class Answer implements Serializable {
 
 	public void setReview(Review review) {
 		this.review = review;
+	}
+
+	public void setquestionId(int questionId) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
