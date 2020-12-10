@@ -1,18 +1,29 @@
 package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
+
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.NonUniqueResultException;
 import polimi.db2.gamifyDB.entities.User;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+
+
 
 @Stateless
 public class UserService{
+	
+	private static final int ARGON2_ITERATIONS = 4;
+	private static final int ARGON2_MEMORY = 65535;
+
+	
 	@PersistenceContext(unitName = "GamifyEJB")
 	private EntityManager em;
 
@@ -70,9 +81,27 @@ public class UserService{
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert user");
 		}
-	       
+	}
+	
+	public boolean checkCredentials(int userId, String password) {
+		User user = em.createNamedQuery("User.findById", User.class).setParameter(1, userId).getSingleResult();
+		if(user == null) return false;
+		Argon2 argon2 = Argon2Factory.createAdvanced(Argon2Factory.Argon2Types.ARGON2id);
+		boolean passed = false;
+		try {
+			String salt = em.createNamedQuery("User.getUserSaltById", String.class).setParameter(1, userId).getSingleResult();
+			if(salt != null) {
+				 String hash = argon2.hash(ARGON2_ITERATIONS,ARGON2_MEMORY,2,password.concat(salt).toCharArray(),StandardCharsets.UTF_8);
+				 String db_hash = em.createNamedQuery("User.getUserHashById", String.class).setParameter(1, userId).getSingleResult();
+				 passed = (hash == db_hash);
+			}
+		} catch(Exception e) {
+			passed = false;
+		}
+	    return passed;
 
 	}
+	
 	public User getUserWhoSubmitted(){}
 	public User getUserWhoCancelled(){}
 
