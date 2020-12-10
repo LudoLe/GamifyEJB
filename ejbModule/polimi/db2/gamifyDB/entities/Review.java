@@ -11,8 +11,9 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Review.findAll", query="SELECT r FROM Review r")
-@NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.review_id=?")
+@NamedQueries({
+@NamedQuery(name="Review.findAll", query="SELECT r FROM Review r"),
+@NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.review_id=?")})
 
 public class Review implements Serializable {
 	private static final long serialVersionUID = 1L;
