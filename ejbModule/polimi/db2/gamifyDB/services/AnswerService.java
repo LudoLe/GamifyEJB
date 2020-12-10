@@ -6,9 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.NonUniqueResultException;
-import it.polimi.db2.mission.entities.User;
-import it.polimi.db2.mission.exceptions.*;
+import polimi.db2.gamifyDB.entities.User;
+import polimi.db2.gamifyDB.entities.Answer;
+import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
+import java.util.Date;
 
 @Stateless
 public class AnswerService {
