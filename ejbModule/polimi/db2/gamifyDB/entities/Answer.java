@@ -10,6 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @NamedQuery(name="Answer.findAll", query="SELECT a FROM Answer a")
+@NamedQuery(name="Answer.findAnswersByProductId", query="SELECT a FROM Answer a JOIN a.question q WHERE q.questionaire_id=?")
 public class Answer implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,8 @@
 package polimi.db2.gamifyDB.entities;
 
 import java.io.Serializable;
+import java.sql.Statement;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 @Entity
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 @NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.password = ?2")
+@NamedQuery(name = "User.getUsers", query = "SELECT * FROM User")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
