@@ -2,10 +2,16 @@
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 	<persistence-unit name="GamifyEJB"
 		transaction-type="JTA">		
-		<jta-data-source>GamifyDB</jta-data-source>					
+		<jta-data-source>GamifyDB</jta-data-source>
+		<class>polimi.db2.gamifyDB.entities.User</class>
+		<class>polimi.db2.gamifyDB.entities.Answer</class>
+		<class>polimi.db2.gamifyDB.entities.Log</class>
+		<class>polimi.db2.gamifyDB.entities.Offensive_word</class>
+		<class>polimi.db2.gamifyDB.entities.Question</class>
+		<class>polimi.db2.gamifyDB.entities.Questionaire</class>
+		<class>polimi.db2.gamifyDB.entities.Review</class>					
 		<properties>
 			<property name="eclipselink.logging.level" value="FINE" />
 		</properties>
 	</persistence-unit>
 </persistence>
-	
