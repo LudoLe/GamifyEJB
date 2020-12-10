@@ -23,8 +23,8 @@ public class Log implements Serializable {
 
 	//bi-directional many-to-one association to Questionaire
 	@ManyToOne
-	@JoinColumn(name="questionaire_id")
-	private Questionaire questionaire;
+	@JoinColumn(name="questionnaire_id")
+	private Questionnaire questionnaire;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
@@ -50,12 +50,12 @@ public class Log implements Serializable {
 		this.datetime = datetime;
 	}
 
-	public Questionaire getQuestionaire() {
-		return this.questionaire;
+	public Questionnaire getQuestionnaire() {
+		return this.questionnaire;
 	}
 
-	public void setQuestionaire(Questionaire questionaire) {
-		this.questionaire = questionaire;
+	public void setQuestionnaire(Questionnaire questionnaire) {
+		this.questionnaire = questionnaire;
 	}
 
 	public User getUser() {

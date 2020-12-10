@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @NamedQueries({
 @NamedQuery(name="Review.findAll", query="SELECT r FROM Review r"),
-@NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.review_id=?")})
+@NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.reviewId=?1")})
 
 public class Review implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -39,10 +39,10 @@ public class Review implements Serializable {
 	@OneToMany(mappedBy="review")
 	private List<Answer> answers;
 
-	//bi-directional many-to-one association to Questionaire
+	//bi-directional many-to-one association to Questionnaire
 	@ManyToOne
-	@JoinColumn(name="questionaire_id")
-	private Questionaire questionaire;
+	@JoinColumn(name="questionnaire_id")
+	private Questionnaire questionnaire;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
@@ -122,12 +122,12 @@ public class Review implements Serializable {
 		return answer;
 	}
 
-	public Questionaire getQuestionaire() {
-		return this.questionaire;
+	public Questionnaire getQuestionnaire() {
+		return this.questionnaire;
 	}
 
-	public void setQuestionaire(Questionaire questionaire) {
-		this.questionaire = questionaire;
+	public void setQuestionnaire(Questionnaire questionnaire) {
+		this.questionnaire = questionnaire;
 	}
 
 	public User getUser() {

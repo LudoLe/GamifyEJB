@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.NonUniqueResultException;
 import polimi.db2.gamifyDB.entities.User;
+import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
 import java.util.Date;
@@ -20,47 +21,38 @@ public class ReviewService {
 	public ReviewService(){
 	}
 	
-	public void createReview(int canAccesAge, int canAccessSex, Date date, String expertise, int userId, int questionaireId){
+	public int createReview(int canAccessAge, int canAccessSex,Date date, String expertise, int userId, int questionaireId) throws Exception{
 		try{
 		    Review review= new Review();
-		    
-		    User user=(new UserService()).g;
-		    user
-		    
-		    review.setCanAccessAge(canAccesAge);
+		 
+		    User user=(new UserService()).find(userId);
+		  
+		    review.setCanAccessAge(canAccessAge);
 		    review.setCanAccessSex(canAccessSex);
-		    review.setDatetime(datetime);
+		    review.setDatetime(date);
 		    review.setExpertise(expertise);
-		    review.setUser();
+		    review.setUser(user);
 		   
-	        em.persist(answer);
+	        em.persist(review);
 	        em.flush();
-	        return question.getId();
+	        return review.getReviewId();
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     
 	}
 	
-	public List<Question> getQuestionsByProduct(int productId){
-		List<question> questions = null;
-	try {
-		questions = em.createNamedQuery("Question.getQuestionsByProductId", Question.class).setParameter(1, productId).getResultList();
-		return questions;
-	} catch (PersistenceException e) {
-		throw new Exception("Could not retrieve questions for this product" + productId );
-	}
-	else return null;
-}
+	public Review find(int reviewId) throws Exception{
+		  return em.find(Review.class,reviewId);
+		}
 	
-	public List<Question> findAll(){
-		List<Question> questions = null;
+	public List<Review> findAll() throws Exception{
+		List<Review> reviews = null;
 	try {
-		questions = em.createNamedQuery("Answer.findAll", Answer.class).getResultList();
-		return answers;
+		reviews = em.createNamedQuery("Review.findAll", Review.class).getResultList();
+		return reviews;
 	} catch (PersistenceException e) {
-		throw new Exception("Could not retrieve questions");
-	}
-	else return null;
+		throw new Exception("Could not retrieve questions");	}
+
 }
 
 }
