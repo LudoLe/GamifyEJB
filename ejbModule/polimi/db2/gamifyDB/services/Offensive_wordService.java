@@ -6,13 +6,14 @@ import polimi.db2.gamifyDB.entities.Log;
 import polimi.db2.gamifyDB.entities.Offensive_word;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class Offensive_wordService {
+public class Offensive_wordService{
 	
 	@PersistenceContext(unitName = "GamifyEJB")
 	private EntityManager em;

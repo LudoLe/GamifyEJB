@@ -15,9 +15,9 @@ import java.util.List;
 @Entity
 @NamedQueries({
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u"),
-@NamedQuery(name="User.findById", query="SELECT u FROM User u WHERE u.userId=?"),
-@NamedQuery(name="User.getSaltByUsedId", query="SELECT u.passwordSalt FROM User u WHERE u.userId=?"),
-@NamedQuery(name="User.getHashByUserId", query="SELECT u.passwordHash FROM User u WHERE u.userId=?"),
+@NamedQuery(name="User.findById", query="SELECT u FROM User u WHERE u.userId=?1"),
+@NamedQuery(name="User.getSaltByUsedId", query="SELECT u.passwordSalt FROM User u WHERE u.userId=?1"),
+@NamedQuery(name="User.getHashByUserId", query="SELECT u.passwordHash FROM User u WHERE u.userId=?1"),
 @NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.passwordSalt = ?2")})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
