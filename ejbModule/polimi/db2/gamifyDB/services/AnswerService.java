@@ -24,11 +24,14 @@ public class AnswerService {
 	public int createAnswer(String content, int questionId, int reviewId) throws Exception{
 		try{
 		    Answer answer = new Answer();
-			Question question = em.createNamedQuery("Question.findById", Question.class).setParameter(1, questionId).getSingleResult();
-			Review review = em.createNamedQuery("Review.findById", Review.class).setParameter(1, reviewId).getSingleResult();
-			answer.setContent(content);
+		    
+			Question question = (new QuestionService()).find(questionId);
+			Review review = (new ReviewService()).find(reviewId);
+			
 		    answer.setQuestion(question);
 	        answer.setReview(review);
+	        answer.setContent(content);
+	        
 	        em.persist(answer);
 	        em.flush();
 	        return answer.getAnswerId();
@@ -36,16 +39,6 @@ public class AnswerService {
 			throw new Exception("Could not insert question");
 		}     
 	}
-	
-	public List<Answer> findAnswersByProduct(int productId) throws Exception {
-		List<Answer> answers = null;
-	try {
-		answers = em.createNamedQuery("Answer.findAnswersByProductId", Answer.class).setParameter(1, productId).getResultList();
-		return answers;
-	} catch (PersistenceException e) {
-		throw new Exception("Could not retrieve answers for thi product" + productId);
-	}
-}
 	
 	public List<Answer> findAll() throws Exception {
 		List<Answer> answers = null;
@@ -56,5 +49,9 @@ public class AnswerService {
 		throw new Exception("Could not retrieve answers");
 	}
 }
+	
+	public Answer find(int answerId) throws Exception{
+		  return em.find(Answer.class, answerId);
+		}
 
 }

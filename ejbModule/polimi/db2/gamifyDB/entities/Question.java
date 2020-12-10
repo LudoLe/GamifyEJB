@@ -10,10 +10,7 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQueries({
-@NamedQuery(name="Question.findAll", query="SELECT q FROM Question q"),
-@NamedQuery(name="Question.findById", query="SELECT q FROM Question q WHERE q.question_id=?"),
-@NamedQuery(name="Answer.findQuestionsByProductId", query="SELECT q FROM Question q WHERE q.questionaire_id=?")})
+@NamedQuery(name="Question.findAll", query="SELECT q FROM Question q")
 public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,8 +26,8 @@ public class Question implements Serializable {
 
 	//bi-directional many-to-one association to Questionaire
 	@ManyToOne
-	@JoinColumn(name="questionaire_id")
-	private Questionaire questionaire;
+	@JoinColumn(name="questionnaire_id")
+	private Questionnaire questionnaire;
 
 	public Question() {
 	}
@@ -73,12 +70,12 @@ public class Question implements Serializable {
 		return answer;
 	}
 
-	public Questionaire getQuestionaire() {
-		return this.questionaire;
+	public Questionnaire getQuestionnaire() {
+		return this.questionnaire;
 	}
 
-	public void setQuestionaire(Questionaire questionaire) {
-		this.questionaire = questionaire;
+	public void setQuestionnaire(Questionnaire questionnaire) {
+		this.questionnaire = questionnaire;
 	}
 
 }

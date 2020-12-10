@@ -8,6 +8,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.NonUniqueResultException;
 import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Question;
+import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
 import java.util.Date;
@@ -22,40 +23,36 @@ public class QuestionService {
 	public QuestionService(){
 	}
 	
-	public void createQuestion(String content, int questionaireId){
+	public int createQuestion(String content, int questionnaireId) throws Exception{
 		try{
-		    Question question= new Question();
+			Question question= new Question();
+			Questionnaire questionnaire= (new QuestionnaireService()).find(questionnaireId);
+			
 		    question.setContent(content);
-		    question.setquestionaireId(questionaireId);
-	        
-	        em.persist(answer);
+		    question.setQuestionnaire(questionnaire);
+		    question.setAnswers(null);
+	     
+	        em.persist(question);
 	        em.flush();
-	        return question.getId();
+	        return question.getQuestionId();
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     
 	}
 	
-	public List<Question> getQuestionsByProduct(int productId){
-		List<question> questions = null;
-	try {
-		questions = em.createNamedQuery("Question.getQuestionsByProductId", Question.class).setParameter(1, productId).getResultList();
-		return questions;
-	} catch (PersistenceException e) {
-		throw new Exception("Could not retrieve questions for this product" + productId );
-	}
-	else return null;
-}
 	
-	public List<Question> findAll(){
+	public List<Question> findAll() throws Exception{
 		List<Question> questions = null;
 	try {
 		questions = em.createNamedQuery("Answer.findAll", Question.class).getResultList();
-		return answers;
+		return questions;
 	} catch (PersistenceException e) {
 		throw new Exception("Could not retrieve questions");
 	}
-	else return null;
 }
+	
+	public Question find(int questionId) throws Exception{
+		  return em.find(Question.class, questionId);
+		}
 
 }
