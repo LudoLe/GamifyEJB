@@ -1,19 +1,26 @@
 package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
+
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.NonUniqueResultException;
 import polimi.db2.gamifyDB.entities.User;
 import polimi.db2.gamifyDB.entities.Question;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Stateless
 public class UserService{
+	
+	private static final int ARGON2_ITERATIONS = 4;
+	private static final int ARGON2_MEMORY = 65535;
+	
 	@PersistenceContext(unitName = "GamifyEJB")
 	private EntityManager em;
 
@@ -21,21 +28,27 @@ public class UserService{
 	}
 
 	
-	public User checkCredentials(String usrn, String pwd) throws Exception, NonUniqueResultException {
-		List<User> uList = null;
+	public User checkCredentials(String username, String password) throws Exception {
+		User user = em.createNamedQuery("User.findByUsername", User.class).setParameter(1, username).getSingleResult();
+		if(user == null) throw new Exception();
+		Argon2 argon2 = Argon2Factory.createAdvanced(Argon2Factory.Argon2Types.ARGON2id);
+		boolean passed = false;
 		try {
-			uList = em.createNamedQuery("User.checkCredentials", User.class).setParameter(1, usrn).setParameter(2, pwd)
-					.getResultList();
-		} catch (PersistenceException e) {
-			throw new Exception("Could not verify credentals");
+			String salt = user.getPasswordSalt();
+			if(salt != null) {
+				 String hash = argon2.hash(ARGON2_ITERATIONS,ARGON2_MEMORY,2,password.concat(salt).toCharArray(),StandardCharsets.UTF_8);
+				 String db_hash = user.getPasswordHash();
+				 passed = (hash == db_hash);
+			}
+		} catch(Exception e) {
+			passed = false;
 		}
-		if (uList.isEmpty())
-			return null;
-		else if (uList.size() == 1)
-			return uList.get(0);
-		throw new NonUniqueResultException("More than one user registered with same credentials");
+		if(!passed) throw new Exception();
+		else return user;
+
 
 	}
+	
 	
 	public List<User> getUsers() throws Exception{
 			List<User> uList = null;
