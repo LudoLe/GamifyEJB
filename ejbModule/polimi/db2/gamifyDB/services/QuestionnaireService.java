@@ -23,19 +23,30 @@ public class QuestionnaireService {
 	public QuestionnaireService(){
 	}
 	
-	public int createQuestionnaire(String image, String name) throws Exception{
-		try{
-			Questionnaire questionnaire= new Questionnaire();
-		   
+	public Questionnaire createQuestionnaire(String image, String name, List<String> questions) throws Exception{
+		Questionnaire questionnaire = new Questionnaire();
+		try{		   
 			questionnaire.setImage(image);
 			questionnaire.setName(name);
 			//date
 	        em.persist(questionnaire);
-	        em.flush();
-	        return questionnaire.getQuestionnaireId();
 		} catch (PersistenceException e) {
+			throw new Exception("Could not insert questionnaire");
+		}    
+		try {
+			QuestionService questionService = new QuestionService();
+			for(String question : questions) {
+				Question q = questionService.createQuestion(question, questionnaire);
+				em.persist(q);
+			}
+			em.flush();
+	        return questionnaire;
+		} catch (Exception e) {
+			em.clear();
 			throw new Exception("Could not insert question");
-		}     
+		} finally {
+			em.clear();
+		}
 	}
 	
 	public List<Question> findAll() throws Exception{
