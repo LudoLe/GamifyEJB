@@ -23,18 +23,13 @@ public class QuestionService {
 	public QuestionService(){
 	}
 	
-	public int createQuestion(String content, int questionnaireId) throws Exception{
+	public Question createQuestion(String content, Questionnaire questionnaire) throws Exception{
 		try{
 			Question question= new Question();
-			Questionnaire questionnaire= (new QuestionnaireService()).find(questionnaireId);
-			
 		    question.setContent(content);
 		    question.setQuestionnaire(questionnaire);
 		    question.setAnswers(null);
-	     
-	        em.persist(question);
-	        em.flush();
-	        return question.getQuestionId();
+	        return question;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     
