@@ -11,6 +11,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="`Review`")
 @NamedQueries({
 @NamedQuery(name="Review.findAll", query="SELECT r FROM Review r"),
 @NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.reviewId=?1")})
@@ -20,6 +21,7 @@ public class Review implements Serializable {
 
 	@Id
 	@Column(name="review_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int reviewId;
 
 	@Column(name="can_access_age")

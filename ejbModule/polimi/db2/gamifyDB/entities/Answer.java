@@ -9,6 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
+@Table(name="`Answer`")
 @NamedQueries({
 @NamedQuery(name="Answer.findAll", query="SELECT a FROM Answer a"),
 @NamedQuery(name="Answer.findAnswersByProductId", query="SELECT a FROM Answer a JOIN a.question q WHERE q.questionnaire=?1")
@@ -18,6 +19,7 @@ public class Answer implements Serializable {
 
 	@Id
 	@Column(name="answer_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int answerId;
 
 	private String content;

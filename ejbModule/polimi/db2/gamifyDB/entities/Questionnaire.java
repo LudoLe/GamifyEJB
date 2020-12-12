@@ -12,6 +12,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="`Questionnaire`")
 @NamedQuery(name="Questionnaire.findAll", query="SELECT q FROM Questionnaire q")
 
 public class Questionnaire implements Serializable {
@@ -19,6 +20,7 @@ public class Questionnaire implements Serializable {
 
 	@Id
 	@Column(name="questionnaire_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int questionnaireId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -73,6 +75,14 @@ public class Questionnaire implements Serializable {
 
 	public void setLogs(List<Log> logs) {
 		this.logs = logs;
+	}
+	
+	public void setDate(Date date) {
+		this.datetime = date;
+	}
+	
+	public Date getDate() {
+		return this.datetime;
 	}
 
 	public Log addLog(Log log) {

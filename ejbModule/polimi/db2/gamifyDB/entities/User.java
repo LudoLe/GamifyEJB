@@ -1,7 +1,6 @@
 package polimi.db2.gamifyDB.entities;
 
 import java.io.Serializable;
-import java.sql.Statement;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,17 +12,19 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="`User`")
 @NamedQueries({
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u"),
 @NamedQuery(name="User.findByUsername", query="SELECT u FROM User u WHERE u.username=?1"),
-@NamedQuery(name="User.getSaltByUserId", query="SELECT u.passwordSalt FROM User u WHERE u.userId=?1"),
 @NamedQuery(name="User.getHashByUserId", query="SELECT u.passwordHash FROM User u WHERE u.userId=?1"),
-@NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.passwordSalt = ?2")})
+@NamedQuery(name="User.exists", query="SELECT count(u) FROM User u WHERE u.username=?1 OR u.email=?2"),
+})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="user_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int userId;
 
 	private int admin;
@@ -37,9 +38,6 @@ public class User implements Serializable {
 
 	@Column(name="password_hash")
 	private String passwordHash;
-
-	@Column(name="password_salt")
-	private String passwordSalt;
 
 	private String sex;
 
@@ -102,14 +100,6 @@ public class User implements Serializable {
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
-	}
-
-	public String getPasswordSalt() {
-		return this.passwordSalt;
-	}
-
-	public void setPasswordSalt(String passwordSalt) {
-		this.passwordSalt = passwordSalt;
 	}
 
 	public String getSex() {

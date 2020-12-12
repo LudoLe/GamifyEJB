@@ -4,14 +4,11 @@ import javax.persistence.PersistenceException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.NonUniqueResultException;
-import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Question;
 import polimi.db2.gamifyDB.entities.Questionnaire;
-import polimi.db2.gamifyDB.entities.Review;
-import java.util.List;
+
 import java.util.Date;
+import java.util.List;
 
 
 @Stateless
@@ -23,12 +20,12 @@ public class QuestionnaireService {
 	public QuestionnaireService(){
 	}
 	
-	public Questionnaire createQuestionnaire(String image, String name, List<String> questions) throws Exception{
+	public Questionnaire createQuestionnaire(String image, String name, Date date, List<String> questions) throws Exception{
 		Questionnaire questionnaire = new Questionnaire();
 		try{		   
 			questionnaire.setImage(image);
 			questionnaire.setName(name);
-			//date
+			questionnaire.setDate(date);
 	        em.persist(questionnaire);
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert questionnaire");
