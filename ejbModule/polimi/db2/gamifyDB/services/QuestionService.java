@@ -20,7 +20,7 @@ public class QuestionService {
 	
 	public Question createQuestion(String content, Questionnaire questionnaire) throws Exception{
 		try{
-			Question question= new Question();
+			Question question = new Question();
 		    question.setContent(content);
 		    question.setQuestionnaire(questionnaire);
 		    question.setAnswers(null);
