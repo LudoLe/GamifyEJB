@@ -10,12 +10,14 @@ import java.util.Date;
  * 
  */
 @Entity
+@Table(name="`Log`")
 @NamedQuery(name="Log.findAll", query="SELECT l FROM Log l")
 public class Log implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="log_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int logId;
 
 	@Temporal(TemporalType.TIMESTAMP)

@@ -2,24 +2,26 @@ package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import polimi.db2.gamifyDB.entities.User;
-import polimi.db2.gamifyDB.entities.Question;
-import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Stateless
 public class UserService{
 	
-	private static final int ARGON2_ITERATIONS = 4;
-	private static final int ARGON2_MEMORY = 65535;
+	// I set this parameters to low, pretty unsafe values so login is faster
+	private static final int ARGON2_ITERATIONS = 2;
+	private static final int ARGON2_MEMORY = 16384;
+	private static final int ARGON2_PARALLELISM = 1;
+	private static final int ARGON2_SALT_LENGTH = 64;
+	private static final int ARGON2_HASH_LENGTH = 128;
+
+
 	
 	@PersistenceContext(unitName = "GamifyEJB")
 	private EntityManager em;
@@ -29,22 +31,21 @@ public class UserService{
 
 	
 	public User checkCredentials(String username, String password) throws Exception {
-		User user = em.createNamedQuery("User.findByUsername", User.class).setParameter(1, username).getSingleResult();
-		if(user == null) throw new Exception();
-		Argon2 argon2 = Argon2Factory.createAdvanced(Argon2Factory.Argon2Types.ARGON2id);
-		boolean passed = false;
+		User user;
 		try {
-			String salt = user.getPasswordSalt();
-			if(salt != null) {
-				 String hash = argon2.hash(ARGON2_ITERATIONS,ARGON2_MEMORY,2,password.concat(salt).toCharArray(),StandardCharsets.UTF_8);
-				 String db_hash = user.getPasswordHash();
-				 passed = (hash == db_hash);
-			}
+			user = em.createNamedQuery("User.findByUsername", User.class).setParameter(1, username).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+		if(user == null) throw new Exception();
+		boolean passed = false;
+        Argon2PasswordEncoder encoder = new Argon2PasswordEncoder(ARGON2_SALT_LENGTH, ARGON2_HASH_LENGTH, ARGON2_PARALLELISM, ARGON2_MEMORY, ARGON2_ITERATIONS);
+		try {
+			passed = encoder.matches(password, user.getPasswordHash());
 		} catch(Exception e) {
 			passed = false;
 		}
-		if(!passed) throw new Exception();
-		else return user;
+		return passed ? user : null;
 
 
 	}
@@ -64,16 +65,20 @@ public class UserService{
 		  return em.find(User.class, userId);
 		}
 	
-	public int createUser(String usrn, String pwd, String email)throws Exception{
+	public User createUser(String usrn, String pwd, String email) throws Exception{
 		try{
+			//checks that username and email aren't already in use
+		  if(em.createNamedQuery("User.exists", Long.class).setParameter(1, usrn).setParameter(2, email).getSingleResult() >= 1) return null;
 		  User user = new User();
 	        user.setUsername(usrn);
-	        user.setPasswordHash(pwd);
+	        Argon2PasswordEncoder encoder = new Argon2PasswordEncoder(ARGON2_SALT_LENGTH, ARGON2_HASH_LENGTH, ARGON2_PARALLELISM, ARGON2_MEMORY, ARGON2_ITERATIONS);
+	        String hash = encoder.encode(pwd);				
+	        user.setPasswordHash(hash);
 	        user.setEmail(email);
 	        user.setAdmin((byte) 0);
 	        em.persist(user);
 	        em.flush();
-	        return user.getUserId();
+	        return user;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert user");
 		}

@@ -9,6 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
+@Table(name="`Offensive_word`")
 @NamedQuery(name="Offensive_word.findAll", query="SELECT o FROM Offensive_word o")
 public class Offensive_word implements Serializable {
 	private static final long serialVersionUID = 1L;
