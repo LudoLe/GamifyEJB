@@ -3,6 +3,8 @@ package polimi.db2.gamifyDB.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.Date;
 import java.util.List;
 
@@ -13,21 +15,24 @@ import java.util.List;
  */
 @Entity
 @Table(name="`Questionnaire`")
-@NamedQuery(name="Questionnaire.findAll", query="SELECT q FROM Questionnaire q")
-
+@NamedQuery(name="Questionnaire.list", query="SELECT q FROM Questionnaire q ORDER BY q.datetime ASC")
+@NamedQuery(name="Questionnaire.listPast", query="SELECT q FROM Questionnaire q WHERE q.datetime < CURRENT_DATE ORDER BY q.datetime ASC")
 public class Questionnaire implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="questionnaire_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Expose
 	private int questionnaireId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@Expose
 	private Date datetime;
 
-	private String image;
+	private transient String image;
 
+	@Expose
 	private String name;
 
 	//bi-directional many-to-one association to Log
