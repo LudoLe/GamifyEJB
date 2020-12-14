@@ -3,6 +3,8 @@ package polimi.db2.gamifyDB.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 
 /**
  * The persistent class for the Answer database table.
@@ -22,11 +24,13 @@ public class Answer implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int answerId;
 
+	@Expose
 	private String content;
 
 	//bi-directional many-to-one association to Question
 	@ManyToOne
 	@JoinColumn(name="question_id")
+	@Expose
 	private Question question;
 
 	//bi-directional many-to-one association to Review
