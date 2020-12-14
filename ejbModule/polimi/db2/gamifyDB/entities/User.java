@@ -3,6 +3,9 @@ package polimi.db2.gamifyDB.entities;
 import java.io.Serializable;
 
 import javax.persistence.*;
+
+import com.google.gson.annotations.Expose;
+
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class User implements Serializable {
 	@Id
 	@Column(name="user_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Expose
 	private int userId;
 
 	private int admin;
@@ -41,6 +45,7 @@ public class User implements Serializable {
 
 	private String sex;
 
+	@Expose
 	private String username;
 
 	//bi-directional many-to-one association to Log

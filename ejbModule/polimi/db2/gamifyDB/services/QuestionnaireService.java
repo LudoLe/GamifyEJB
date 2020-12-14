@@ -1,14 +1,21 @@
 package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletResponse;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import polimi.db2.gamifyDB.entities.Log;
 import polimi.db2.gamifyDB.entities.Question;
 import polimi.db2.gamifyDB.entities.Questionnaire;
+import polimi.db2.gamifyDB.entities.Review;
+import polimi.db2.gamifyDB.entities.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Stateless
@@ -26,6 +33,7 @@ public class QuestionnaireService {
 			questionnaire.setImage(image);
 			questionnaire.setName(name);
 			questionnaire.setDate(date);
+			//TODO check for existance of another questionnaire on same date
 	        em.persist(questionnaire);
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert questionnaire");
@@ -56,8 +64,48 @@ public class QuestionnaireService {
 	}
 }
 	
+	public List<User> getCompletedUsers(int id) throws Exception{
+		Questionnaire questionnaire = this.find(id);
+		if(questionnaire == null) return null;
+		List<Review> reviews = questionnaire.getReviews();
+		List<User> users = reviews.stream().map(review -> review.getUser()).distinct().collect(Collectors.toList());
+		return users;
+}
+	
+	public List<User> getCanceledUsers(int id) throws Exception{
+		Questionnaire questionnaire = this.find(id);
+		if(questionnaire == null) return null;
+		List<Log> logs = questionnaire.getLogs();
+		List<User> users = logs.stream().map(log -> log.getUser()).distinct().collect(Collectors.toList());
+		return users;
+}
+	
+	
 	public Questionnaire find(int questionnaireId) throws Exception{
 	  return em.find(Questionnaire.class, questionnaireId);
+	}
+	
+	public boolean delete(int questionnaireId) throws Exception{
+		Questionnaire questionnaire = this.find(questionnaireId);
+		
+		if(questionnaire == null) return false;
+		
+		Date date = questionnaire.getDate();
+		if(date.after(new Date())) {
+			return false;
+		}
+		em.remove(questionnaire);
+		em.flush();
+		return true;
+		}
+
+	public List<Questionnaire> getQuestionnaires(int start, int size, boolean past) throws Exception {
+		TypedQuery<Questionnaire> query;
+		if(past) query = em.createNamedQuery("Questionnaire.listPast", Questionnaire.class);
+		else query = em.createNamedQuery("Questionnaire.list", Questionnaire.class);
+		query.setMaxResults(size);
+		query.setFirstResult(start);
+		return query.getResultList();
 	}
 
 }
