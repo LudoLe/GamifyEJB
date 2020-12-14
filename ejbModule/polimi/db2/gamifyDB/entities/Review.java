@@ -14,7 +14,8 @@ import java.util.List;
 @Table(name="`Review`")
 @NamedQueries({
 @NamedQuery(name="Review.findAll", query="SELECT r FROM Review r"),
-@NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.reviewId=?1")})
+@NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.reviewId=?1"),
+@NamedQuery(name="Review.findByUserAndQuestionnaire", query="SELECT r FROM Review r WHERE r.questionnaire=?1 AND r.user=?2")})
 
 public class Review implements Serializable {
 	private static final long serialVersionUID = 1L;
