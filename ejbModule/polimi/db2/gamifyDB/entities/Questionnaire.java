@@ -15,7 +15,8 @@ import java.util.List;
  */
 @Entity
 @Table(name="`Questionnaire`")
-@NamedQuery(name="Questionnaire.list", query="SELECT q FROM Questionnaire q ORDER BY q.datetime ASC")
+@NamedQuery(name="Questionnaire.existsOnDate", query="SELECT COUNT(q) FROM Questionnaire q WHERE q.datetime = ?1")
+@NamedQuery(name="Questionnaire.listOrdered", query="SELECT q FROM Questionnaire q ORDER BY q.datetime ASC")
 @NamedQuery(name="Questionnaire.listPast", query="SELECT q FROM Questionnaire q WHERE q.datetime < CURRENT_DATE ORDER BY q.datetime ASC")
 public class Questionnaire implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public class Questionnaire implements Serializable {
 	@Expose
 	private Date datetime;
 
-	private transient String image;
+	private String image;
 
 	@Expose
 	private String name;
