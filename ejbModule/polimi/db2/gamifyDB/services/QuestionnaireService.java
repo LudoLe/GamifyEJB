@@ -14,6 +14,7 @@ import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import polimi.db2.gamifyDB.entities.User;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,9 +87,26 @@ public class QuestionnaireService {
 	  return em.find(Questionnaire.class, questionnaireId);
 	}
 	
+	public Questionnaire findByDate(Date today) throws Exception{
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String date=simpleDateFormat.format(today);
+		Date todate=simpleDateFormat.parse(date);
+
+		
+		 return em
+		                .createNamedQuery("Questionnaire.list", Questionnaire.class)
+		                .getResultList()
+		                .stream()
+		                .filter(x -> x.getDate().equals(todate))
+		                .findFirst()
+		                .orElse(null);
+		    
+		}
+
+	
 	public boolean delete(int questionnaireId) throws Exception{
 		Questionnaire questionnaire = this.find(questionnaireId);
-		
 		if(questionnaire == null) return false;
 		
 		Date date = questionnaire.getDate();

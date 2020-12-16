@@ -51,10 +51,10 @@ public class UserService{
 	}
 	
 	
-	public List<User> getUsers() throws Exception{
+	public List<User> findAll() throws Exception{
 			List<User> uList = null;
 		try {
-			uList = em.createNamedQuery("User.getUsers", User.class).getResultList();
+			uList = em.createNamedQuery("User.findAll", User.class).getResultList();
 			return uList;
 		} catch (PersistenceException e){
 			throw new Exception("Could not retrieve users");
