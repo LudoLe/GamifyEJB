@@ -38,15 +38,15 @@ public class Questionnaire implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Log
-	@OneToMany(mappedBy="questionnaire")
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
 	private List<Log> logs;
 
 	//bi-directional many-to-one association to Question
-	@OneToMany(mappedBy="questionnaire")
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
 	private List<Question> questions;
 
 	//bi-directional many-to-one association to Review
-	@OneToMany(mappedBy="questionnaire")
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
 	private List<Review> reviews;
 
 	public Questionnaire() {
