@@ -39,7 +39,7 @@ public class Review implements Serializable {
 	private int points;
 
 	//bi-directional many-to-one association to Answer
-	@OneToMany(mappedBy="review")
+	@OneToMany(mappedBy="review", fetch = FetchType.LAZY)
 	private List<Answer> answers;
 
 	//bi-directional many-to-one association to Questionnaire
