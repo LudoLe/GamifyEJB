@@ -35,8 +35,8 @@ public class QuestionnaireService {
 			questionnaire.setImage(image);
 			questionnaire.setName(name);
 			questionnaire.setDate(date);
-			//TODO check for existance of another questionnaire on same date
-	        em.persist(questionnaire);
+			if(this.exists(date)) return null;
+			em.persist(questionnaire);
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert questionnaire");
 		}    
@@ -63,6 +63,14 @@ public class QuestionnaireService {
 		return questions;
 	} catch (PersistenceException e) {
 		throw new Exception("Could not retrieve questions");
+	}
+	}
+	
+	public boolean exists(Date date) {
+	try {
+		return em.createNamedQuery("Questionnaire.existsOnDate", Long.class).setParameter(1, date).getSingleResult() != 0;
+	} catch (Exception e) {
+		return false;
 	}
 }
 	
@@ -121,7 +129,7 @@ public class QuestionnaireService {
 	public List<Questionnaire> getQuestionnaires(int start, int size, boolean past) throws Exception {
 		TypedQuery<Questionnaire> query;
 		if(past) query = em.createNamedQuery("Questionnaire.listPast", Questionnaire.class);
-		else query = em.createNamedQuery("Questionnaire.list", Questionnaire.class);
+		else query = em.createNamedQuery("Questionnaire.listOrdered", Questionnaire.class);
 		query.setMaxResults(size);
 		query.setFirstResult(start);
 		return query.getResultList();

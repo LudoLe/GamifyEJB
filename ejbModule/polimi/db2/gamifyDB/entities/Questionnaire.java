@@ -17,6 +17,8 @@ import java.util.List;
 @Table(name="`Questionnaire`")
 @NamedQueries({
 @NamedQuery(name="Questionnaire.list", query="SELECT q FROM Questionnaire q ORDER BY q.datetime ASC"),
+@NamedQuery(name="Questionnaire.existsOnDate", query="SELECT COUNT(q) FROM Questionnaire q WHERE q.datetime = ?1"),
+@NamedQuery(name="Questionnaire.listOrdered", query="SELECT q FROM Questionnaire q ORDER BY q.datetime ASC"),
 @NamedQuery(name="Questionnaire.listPast", query="SELECT q FROM Questionnaire q WHERE q.datetime < CURRENT_DATE ORDER BY q.datetime ASC")
 }) 
 public class Questionnaire implements Serializable {
@@ -32,21 +34,21 @@ public class Questionnaire implements Serializable {
 	@Expose
 	private Date datetime;
 
-	private transient String image;
+	private String image;
 
 	@Expose
 	private String name;
 
 	//bi-directional many-to-one association to Log
-	@OneToMany(mappedBy="questionnaire")
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
 	private List<Log> logs;
 
 	//bi-directional many-to-one association to Question
-	@OneToMany(mappedBy="questionnaire")
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
 	private List<Question> questions;
 
 	//bi-directional many-to-one association to Review
-	@OneToMany(mappedBy="questionnaire")
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
 	private List<Review> reviews;
 
 	public Questionnaire() {
