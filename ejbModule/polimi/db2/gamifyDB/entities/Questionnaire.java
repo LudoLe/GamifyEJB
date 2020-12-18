@@ -34,6 +34,7 @@ public class Questionnaire implements Serializable {
 	@Expose
 	private Date datetime;
 
+	@Expose
 	private String image;
 
 	@Expose

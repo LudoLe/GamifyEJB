@@ -36,7 +36,12 @@ public class Review implements Serializable {
 
 	private String expertise;
 
-	private int points;
+	@Column(name="points_first_section")
+	private int pointsFirst;
+	
+	@Column(name="points_second_section")
+	private int pointsSecond;
+
 
 	//bi-directional many-to-one association to Answer
 	@OneToMany(mappedBy="review", fetch = FetchType.LAZY)
@@ -96,11 +101,12 @@ public class Review implements Serializable {
 	}
 
 	public int getPoints() {
-		return this.points;
+		return this.pointsFirst + this.pointsSecond;
 	}
 
-	public void setPoints(int points) {
-		this.points = points;
+	public void setPoints(Integer pointsFirst, Integer pointsSecond) {
+		if(pointsFirst != null) this.pointsFirst = pointsFirst;
+		if(pointsSecond != null) this.pointsSecond = pointsSecond;
 	}
 
 	public List<Answer> getAnswers() {
