@@ -2,6 +2,9 @@ package polimi.db2.gamifyDB.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 
@@ -15,12 +18,13 @@ import java.util.List;
 public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Expose
 	@Id
 	@Column(name="question_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int questionId;
 
-
+    @Expose
 	private String content;
 
 	//bi-directional many-to-one association to Answer

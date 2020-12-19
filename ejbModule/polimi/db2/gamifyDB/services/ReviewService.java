@@ -5,8 +5,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import polimi.db2.gamifyDB.entities.User;
+import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Stateless
