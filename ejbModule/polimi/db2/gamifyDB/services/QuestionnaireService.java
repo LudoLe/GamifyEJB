@@ -59,7 +59,7 @@ public class QuestionnaireService {
 	public List<Question> findAll() throws Exception{
 		List<Question> questions = null;
 	try {
-		questions = em.createNamedQuery("Answer.findAll", Question.class).getResultList();
+		questions = em.createNamedQuery("Answer.list", Question.class).getResultList();
 		return questions;
 	} catch (PersistenceException e) {
 		throw new Exception("Could not retrieve questions");

@@ -58,13 +58,13 @@ DROP TABLE IF EXISTS `Log`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Log` (
   `log_id` int(11) NOT NULL,
-  `questionaire_id` int(11) NOT NULL,
+  `questionnaire_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `datetime` datetime NOT NULL,
   PRIMARY KEY (`log_id`),
-  KEY `fk_Log_Questionaire_idx` (`questionaire_id`),
+  KEY `fk_Log_Questionnaire_idx` (`questionnaire_id`),
   KEY `fk_Log_User_idx` (`user_id`),
-  CONSTRAINT `fk_Log_Questionaire` FOREIGN KEY (`questionaire_id`) REFERENCES `Questionaire` (`questionaire_id`),
+  CONSTRAINT `fk_Log_Questionnaire` FOREIGN KEY (`questionnaire_id`) REFERENCES `Questionnaire` (`questionnaire_id`),
   CONSTRAINT `fk_Log_User` FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -110,10 +110,10 @@ DROP TABLE IF EXISTS `Question`;
 CREATE TABLE `Question` (
   `question_id` int(11) NOT NULL AUTO_INCREMENT,
   `content` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `questionaire_id` int(11) NOT NULL,
+  `questionnaire_id` int(11) NOT NULL,
   PRIMARY KEY (`question_id`),
-  KEY `fk_Question_Questionaire_idx` (`questionaire_id`),
-  CONSTRAINT `fk_Question_Questionaire` FOREIGN KEY (`questionaire_id`) REFERENCES `Questionaire` (`questionaire_id`) ON UPDATE CASCADE
+  KEY `fk_Question_Questionnaire_idx` (`questionnaire_id`),
+  CONSTRAINT `fk_Question_Questionnaire` FOREIGN KEY (`questionnaire_id`) REFERENCES `Questionnaire` (`questionnaire_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -127,31 +127,31 @@ LOCK TABLES `Question` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Questionaire`
+-- Table structure for table `Questionnaire`
 --
 
-DROP TABLE IF EXISTS `Questionaire`;
+DROP TABLE IF EXISTS `Questionnaire`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Questionaire` (
-  `questionaire_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Questionnaire` (
+  `questionnaire_id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `datetime` datetime NOT NULL,
-  PRIMARY KEY (`questionaire_id`),
+  PRIMARY KEY (`questionnaire_id`),
   UNIQUE KEY `image_UNIQUE` (`image`),
   UNIQUE KEY `name_UNIQUE` (`name`),
-  UNIQUE KEY `Questionaire_datetime_uindex` (`datetime`)
+  UNIQUE KEY `Questionnaire_datetime_uindex` (`datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Questionaire`
+-- Dumping data for table `Questionnaire`
 --
 
-LOCK TABLES `Questionaire` WRITE;
-/*!40000 ALTER TABLE `Questionaire` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Questionaire` ENABLE KEYS */;
+LOCK TABLES `Questionnaire` WRITE;
+/*!40000 ALTER TABLE `Questionnaire` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Questionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -163,7 +163,7 @@ DROP TABLE IF EXISTS `Review`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Review` (
   `review_id` int(11) NOT NULL AUTO_INCREMENT,
-  `questionaire_id` int(11) NOT NULL,
+  `questionnaire_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `can_access_sex` int(11) NOT NULL,
   `can_access_age` int(11) NOT NULL,
@@ -171,9 +171,9 @@ CREATE TABLE `Review` (
   `datetime` datetime NOT NULL,
   `points` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`review_id`),
-  UNIQUE KEY `index2` (`user_id`,`questionaire_id`),
-  KEY `fk_Review_Questionaire_idx` (`questionaire_id`),
-  CONSTRAINT `fk_Review_Questionaire` FOREIGN KEY (`questionaire_id`) REFERENCES `Questionaire` (`questionaire_id`),
+  UNIQUE KEY `index2` (`user_id`,`questionnaire_id`),
+  KEY `fk_Review_Questionnaire_idx` (`questionnaire_id`),
+  CONSTRAINT `fk_Review_Questionnaire` FOREIGN KEY (`questionnaire_id`) REFERENCES `Questionnaire` (`questionnaire_id`),
   CONSTRAINT `fk_Review_User` FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

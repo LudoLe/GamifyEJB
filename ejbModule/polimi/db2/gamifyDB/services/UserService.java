@@ -4,6 +4,7 @@ import javax.persistence.PersistenceException;
 
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
