@@ -1,6 +1,7 @@
 package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,16 +16,16 @@ public class AnswerService {
 	
 	@PersistenceContext(unitName = "GamifyEJB")
 	private EntityManager em;
+	@EJB(name = "gamifyDB.services/ReviewService")
+	private ReviewService reviewService;
 
 	public AnswerService(){
 	}
 
-	public int createAnswer(String content, int questionId, int reviewId) throws Exception{
+	public int createAnswer(String content, Question question, int reviewId) throws Exception{
 		try{
 		    Answer answer = new Answer();
-		    
-			Question question = (new QuestionService()).find(questionId);
-			Review review = (new ReviewService()).find(reviewId);
+		  	Review review = reviewService.find(reviewId);
 			
 		    answer.setQuestion(question);
 	        answer.setReview(review);

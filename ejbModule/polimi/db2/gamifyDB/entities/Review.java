@@ -135,8 +135,8 @@ public class Review implements Serializable {
 		return this.questionnaire;
 	}
 
-	public void setQuestionnaire(Questionnaire questionnaire) {
-		this.questionnaire = questionnaire;
+	public void setQuestionnaire(Questionnaire questionnaireId) {
+		this.questionnaire = questionnaireId;
 	}
 
 	public User getUser() {

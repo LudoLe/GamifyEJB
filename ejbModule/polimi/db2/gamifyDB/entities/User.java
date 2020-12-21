@@ -32,6 +32,7 @@ public class User implements Serializable {
 	private int admin;
 
 	@Temporal(TemporalType.DATE)
+	@Expose
 	private Date birth;
 
 	private int blocked;
@@ -41,6 +42,7 @@ public class User implements Serializable {
 	@Column(name="password_hash")
 	private String passwordHash;
 
+	@Expose
 	private String sex;
 
 	@Expose

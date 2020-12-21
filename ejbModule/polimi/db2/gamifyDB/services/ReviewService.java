@@ -16,17 +16,20 @@ public class ReviewService {
 	
 	@PersistenceContext(unitName = "GamifyEJB")
 	private EntityManager em;
+	
 
 	public ReviewService(){
 	}
 	
-	public int createReview(int canAccessAge, int canAccessSex,Date date, String expertise, User user, int questionaireId, Integer pointsFirst, Integer pointsSecond) throws Exception{
+	public int createReview(int canAccessAge, int canAccessSex,Date date, String expertise, User user, Questionnaire questionnaire, Integer pointsFirst, Integer pointsSecond) throws Exception{
 		try{
 		    Review review= new Review();	 		  
 		    review.setCanAccessAge(canAccessAge);
 		    review.setCanAccessSex(canAccessSex);
 		    review.setDatetime(date);
 		    review.setExpertise(expertise);
+		    review.setQuestionnaire(questionnaire);
+
 		    review.setUser(user);
 		    review.setPoints(pointsFirst,  pointsSecond);
 		   
