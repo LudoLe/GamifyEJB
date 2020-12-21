@@ -18,26 +18,33 @@ public class AnswerService {
 	private EntityManager em;
 	@EJB(name = "gamifyDB.services/ReviewService")
 	private ReviewService reviewService;
+	
 
 	public AnswerService(){
 	}
 
-	public int createAnswer(String content, Question question, int reviewId) throws Exception{
+	public Answer createAnswer(String content, Question question, Review review) throws Exception{
 		try{
-		    Answer answer = new Answer();
-		  	Review review = reviewService.find(reviewId);
-			
+		    Answer answer = new Answer();			
 		    answer.setQuestion(question);
 	        answer.setReview(review);
-	        answer.setContent(content);
-	        
+	        answer.setContent(content);	        
 	        em.persist(answer);
-	        em.flush();
-	        return answer.getAnswerId();
+	        return answer;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     
 	}
+	
+	public void createAnswers(List<Answer> answers) throws Exception{
+		try{
+			for(Answer answer : answers){ this.createAnswer(answer.getContent(), answer.getQuestion(), answer.getReview()); }
+	          em.flush();
+		} catch (PersistenceException e) {
+			throw new Exception("Could not insert question");
+		}     
+	}
+
 
 	
 	public List<Answer> findAll() throws Exception {

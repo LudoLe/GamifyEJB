@@ -3,13 +3,13 @@
 	<persistence-unit name="GamifyEJB"
 		transaction-type="JTA">		
 		<jta-data-source>GamifyDB</jta-data-source>
-		<class>polimi.db2.gamifyDB.entities.User</class>
 		<class>polimi.db2.gamifyDB.entities.Answer</class>
 		<class>polimi.db2.gamifyDB.entities.Log</class>
 		<class>polimi.db2.gamifyDB.entities.Offensive_word</class>
 		<class>polimi.db2.gamifyDB.entities.Question</class>
 		<class>polimi.db2.gamifyDB.entities.Questionnaire</class>
-		<class>polimi.db2.gamifyDB.entities.Review</class>					
+		<class>polimi.db2.gamifyDB.entities.Review</class>
+		<class>polimi.db2.gamifyDB.entities.User</class>					
 		<properties>
 			<property name="eclipselink.logging.level" value="FINE" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

@@ -21,7 +21,7 @@ public class ReviewService {
 	public ReviewService(){
 	}
 	
-	public int createReview(int canAccessAge, int canAccessSex,Date date, String expertise, User user, Questionnaire questionnaire, Integer pointsFirst, Integer pointsSecond) throws Exception{
+	public Review createReview(int canAccessAge, int canAccessSex,Date date, String expertise, User user, Questionnaire questionnaire, Integer pointsFirst, Integer pointsSecond) throws Exception{
 		try{
 		    Review review= new Review();	 		  
 		    review.setCanAccessAge(canAccessAge);
@@ -29,13 +29,12 @@ public class ReviewService {
 		    review.setDatetime(date);
 		    review.setExpertise(expertise);
 		    review.setQuestionnaire(questionnaire);
-
 		    review.setUser(user);
 		    review.setPoints(pointsFirst,  pointsSecond);
 		   
 	        em.persist(review);
 	        em.flush();
-	        return review.getReviewId();
+	        return review;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     

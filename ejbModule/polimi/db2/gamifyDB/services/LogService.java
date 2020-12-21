@@ -1,8 +1,10 @@
 package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
+import polimi.db2.gamifyDB.entities.User;
 
 import polimi.db2.gamifyDB.entities.Log;
+import polimi.db2.gamifyDB.entities.Questionnaire;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,16 +22,16 @@ public class LogService {
 	public LogService(){
 	}
 	
-	public int createLog() throws Exception{
+	public Log createLog(Questionnaire questionnaire, User user, Date date) throws Exception{
 		try{
-			
-		    Log log=new Log();
-		   
-		    log.setDatetime(new Date());
+		    Log log=new Log();		     
+		    log.setDatetime(date);
+		    log.setQuestionnaire(questionnaire);
+		    log.setUser(user);
 		     
 	        em.persist(log);
 	        em.flush();
-	        return log.getLogId();
+	        return log;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert log");
 		}     
