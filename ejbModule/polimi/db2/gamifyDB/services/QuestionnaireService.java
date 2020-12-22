@@ -82,6 +82,21 @@ public class QuestionnaireService {
 		return users;
 }
 	
+	public List<Questionnaire> getQuestionnairesFill(String name, boolean forDeletion) throws Exception{
+		StringBuilder param = new StringBuilder();
+		param.append('%');
+		param.append(name);
+		param.append('%');
+		String queryString = "SELECT q FROM Questionnaire q WHERE q.name like ?1";
+		
+		if(forDeletion) queryString += " AND q.datetime < CURRENT_DATE";
+		
+		return em.createQuery(queryString, Questionnaire.class)
+				.setMaxResults(10)
+                .setParameter(1, param.toString())
+                .getResultList();
+}
+	
 	public List<User> getCanceledUsers(int id) throws Exception{
 		Questionnaire questionnaire = this.find(id);
 		if(questionnaire == null) return null;
@@ -103,12 +118,9 @@ public class QuestionnaireService {
 
 		
 		 return em
-		                .createNamedQuery("Questionnaire.list", Questionnaire.class)
-		                .getResultList()
-		                .stream()
-		                .filter(x -> x.getDate().equals(todate))
-		                .findFirst()
-		                .orElse(null);
+		                .createNamedQuery("Questionnaire.getByDate", Questionnaire.class)
+		                .setParameter(1, todate)
+		                .getSingleResult();
 		    
 		}
 
@@ -118,7 +130,10 @@ public class QuestionnaireService {
 		if(questionnaire == null) return false;
 		
 		Date date = questionnaire.getDate();
-		if(date.after(new Date())) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date parsedDate = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
+
+		if(date.after(parsedDate) || date.equals(parsedDate)) {
 			return false;
 		}
 		em.remove(questionnaire);
