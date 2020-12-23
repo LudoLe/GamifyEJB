@@ -21,7 +21,7 @@ public class ReviewService {
 	public ReviewService(){
 	}
 	
-	public Review createReview(int canAccessAge, int canAccessSex,Date date, String expertise, User user, Questionnaire questionnaire, Integer pointsFirst, Integer pointsSecond) throws Exception{
+	public Review createReview(int canAccessAge, int canAccessSex,Date date, String expertise, User user, Questionnaire questionnaire) throws Exception{
 		try{
 		    Review review= new Review();	 		  
 		    review.setCanAccessAge(canAccessAge);
@@ -30,7 +30,6 @@ public class ReviewService {
 		    review.setExpertise(expertise);
 		    review.setQuestionnaire(questionnaire);
 		    review.setUser(user);
-		    review.setPoints(pointsFirst,  pointsSecond);
 		   
 	        em.persist(review);
 	        em.flush();
