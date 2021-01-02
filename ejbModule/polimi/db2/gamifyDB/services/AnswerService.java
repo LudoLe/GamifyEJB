@@ -39,7 +39,6 @@ public class AnswerService {
 	public void createAnswers(List<Answer> answers) throws Exception{
 		try{
 			for(Answer answer : answers){ this.createAnswer(answer.getContent(), answer.getQuestion(), answer.getReview()); }
-	          em.flush();
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     
