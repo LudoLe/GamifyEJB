@@ -6,14 +6,12 @@ import javax.persistence.PersistenceException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import polimi.db2.gamifyDB.entities.User;
 import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Stateless
@@ -31,7 +29,6 @@ public class ReviewService {
 	}
 	
 	public Review createReview(int canAccessAge, int canAccessSex, Date date, String expertise, User user, Questionnaire questionnaire, List<Answer> answers, String sex, Date birth) throws Exception{
-		EntityTransaction tx = null;
 		Review review = null;
 		try{
 			review= new Review();	 		  
