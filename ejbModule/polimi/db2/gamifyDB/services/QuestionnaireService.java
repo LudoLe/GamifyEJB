@@ -114,11 +114,18 @@ public class QuestionnaireService {
 		String date=simpleDateFormat.format(today);
 		Date todate=simpleDateFormat.parse(date);
 
-		
-		 return em
-		                .createNamedQuery("Questionnaire.getByDate", Questionnaire.class)
-		                .setParameter(1, todate)
-		                .getSingleResult();
+		Questionnaire output = null;
+		try {
+			output = em
+	                .createNamedQuery("Questionnaire.getByDate", Questionnaire.class)
+	                .setParameter(1, todate)
+	                .getSingleResult();
+			return output;
+		} catch(Exception e) {
+			// not found
+			return null;
+		}
+		 
 		    
 		}
 
