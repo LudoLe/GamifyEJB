@@ -52,9 +52,18 @@ public class UserService{
 	
 	
 	public List<User> findAll() throws Exception{
-			List<User> uList = null;
+		List<User> uList = null;
 		try {
 			uList = em.createNamedQuery("User.findAll", User.class).getResultList();
+			return uList;
+		} catch (PersistenceException e){
+			throw new Exception("Could not retrieve users");
+		}
+	}
+	public List<User> findAllNoBlockedNoAdmin() throws Exception{
+		List<User> uList = null;
+		try {
+			uList = em.createNamedQuery("User.findAllNoBlockedNoAdmin", User.class).getResultList();
 			return uList;
 		} catch (PersistenceException e){
 			throw new Exception("Could not retrieve users");
@@ -85,6 +94,7 @@ public class UserService{
 	       
 
 	}
+	
 	public void getUserWhoSubmitted(){}
 	public void getUserWhoCancelled(){}
 
@@ -95,4 +105,7 @@ public class UserService{
 			throw new Exception("Could not change profile");
 		}
 	}
+
+
+	
 }

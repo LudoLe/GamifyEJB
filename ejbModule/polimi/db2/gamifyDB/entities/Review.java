@@ -2,6 +2,9 @@ package polimi.db2.gamifyDB.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.google.gson.annotations.Expose;
+
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +18,8 @@ import java.util.List;
 @NamedQueries({
 @NamedQuery(name="Review.findAll", query="SELECT r FROM Review r"),
 @NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.reviewId=?1"),
-@NamedQuery(name="Review.findByUserAndQuestionnaire", query="SELECT r FROM Review r WHERE r.questionnaire=?1 AND r.user=?2")})
+@NamedQuery(name="Review.findByUserAndQuestionnaire", query="SELECT r FROM Review r WHERE r.questionnaire=?1 AND r.user=?2"),
+@NamedQuery(name="Review.findAllOnDate", query="SELECT r FROM Review r WHERE r.datetime >= ?1 AND r.datetime <= ?2")})
 
 public class Review implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -37,9 +41,11 @@ public class Review implements Serializable {
 	private String expertise;
 
 	@Column(name="points_first_section")
+	@Expose
 	private int pointsFirst;
 	
 	@Column(name="points_second_section")
+	@Expose
 	private int pointsSecond;
 
 
@@ -55,6 +61,7 @@ public class Review implements Serializable {
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="user_id")
+	@Expose
 	private User user;
 
 	public Review() {
