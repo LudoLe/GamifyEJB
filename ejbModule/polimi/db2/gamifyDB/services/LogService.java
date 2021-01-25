@@ -57,6 +57,6 @@ public class LogService {
 		} catch (PersistenceException e){
 			throw new Exception("Could not retrieve logs");
 		}
-		}
+	}
 
 }

@@ -12,6 +12,9 @@ import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Stateless
@@ -31,6 +34,7 @@ public class ReviewService {
 	public Review createReview(int canAccessAge, int canAccessSex, Date date, String expertise, User user, Questionnaire questionnaire, List<Answer> answers, String sex, Date birth) throws Exception{
 		Review review = null;
 		try{
+			System.out.println("createReview");
 			review= new Review();	 		  
 		    review.setCanAccessAge(canAccessAge);
 		    review.setCanAccessSex(canAccessSex);
@@ -75,5 +79,22 @@ public class ReviewService {
 			throw new Exception("Could not retrieve questions");	}
 
 	}
+	public List<Review> findAllToday() throws Exception{
+		List<Review> reviews = null;
+		try {
+			em.getEntityManagerFactory().getCache().evictAll();
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate = dateFormat.format(new Date());
+            String strStart = strDate+" 00:00:00";
+            String strEnd = strDate+" 23:59:59";
+            Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strStart);
+            Date end = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strEnd);
+			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end).getResultList();
+			
+			return reviews;
+		} catch (PersistenceException e) {
+			throw new Exception("Could not retrieve questions");
+		}
 
+	}
 }

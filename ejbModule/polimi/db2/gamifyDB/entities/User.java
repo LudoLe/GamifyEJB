@@ -16,6 +16,7 @@ import java.util.List;
 @Table(name="`User`")
 @NamedQueries({
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u"),
+@NamedQuery(name="User.findAllNoBlockedNoAdmin", query="SELECT u FROM User u WHERE u.blocked = 0 AND u.admin = 0"),
 @NamedQuery(name="User.findByUsername", query="SELECT u FROM User u WHERE u.username=?1"),
 @NamedQuery(name="User.getHashByUserId", query="SELECT u.passwordHash FROM User u WHERE u.userId=?1"),
 @NamedQuery(name="User.exists", query="SELECT count(u) FROM User u WHERE u.username=?1 OR u.email=?2"),
@@ -114,7 +115,7 @@ public class User implements Serializable {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-
+	
 	public String getUsername() {
 		return this.username;
 	}
