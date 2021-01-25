@@ -38,15 +38,20 @@ public class ReviewService {
 		    review.setExpertise(expertise);
 		    review.setQuestionnaire(questionnaire);
 		    review.setUser(user);
+	        review.setAnswers(answers);
+
+	        answerService.createAnswers(answers, review);
+	        user = em.merge(user);
 		    user.setSex(sex);
 		    user.setBirth(birth);
-		    
-		    userService.updateProfile(user);
+		    List<Review> oldReviews = user.getReviews();
+		    oldReviews.add(review);
+		    user.setReviews(oldReviews);
+		    questionnaire = em.merge(questionnaire);
+		    oldReviews = questionnaire.getReviews();
+		    oldReviews.add(review);
+		    questionnaire.setReviews(oldReviews);
 	        em.persist(review);
-	        for(Answer answer: answers) {
-	 		    answer.setReview(review);
-	        }
-	        answerService.createAnswers(answers);
 
 	        em.flush();
 		} catch (PersistenceException e) {

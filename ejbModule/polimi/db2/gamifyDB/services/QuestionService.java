@@ -24,6 +24,10 @@ public class QuestionService {
 		    question.setContent(content);
 		    question.setQuestionnaire(questionnaire);
 		    question.setAnswers(null);
+		    questionnaire = em.merge(questionnaire);
+		    List<Question> oldQuestions = questionnaire.getQuestions();
+		    oldQuestions.add(question);
+		    questionnaire.setQuestions(oldQuestions);
 	        return question;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
