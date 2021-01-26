@@ -19,15 +19,25 @@ public class QuestionService {
 	}
 	
 	public Question createQuestion(String content, Questionnaire questionnaire) throws Exception{
+		System.out.println("createQuestion");
 		try{
 			Question question = new Question();
 		    question.setContent(content);
 		    question.setQuestionnaire(questionnaire);
 		    question.setAnswers(null);
-		    questionnaire = em.merge(questionnaire);
+		    /*
+		    System.out.println("half createQuestion");
+		    try {
+		    	questionnaire = em.merge(questionnaire);
+		    }catch(Exception e) {
+		    	System.out.println(e.getMessage());
+		    }*/
+		    System.out.println(questionnaire.getQuestions());
+		    System.out.println("half createQuestion");
 		    List<Question> oldQuestions = questionnaire.getQuestions();
 		    oldQuestions.add(question);
 		    questionnaire.setQuestions(oldQuestions);
+		    System.out.println("done createQuestion");
 	        return question;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");

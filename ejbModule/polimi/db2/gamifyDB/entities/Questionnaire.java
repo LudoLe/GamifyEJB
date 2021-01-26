@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class Questionnaire implements Serializable {
 	private List<Log> logs;
 
 	//bi-directional many-to-one association to Question
-	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.EAGER)
 	private List<Question> questions;
 
 	//bi-directional many-to-one association to Review
@@ -53,6 +54,7 @@ public class Questionnaire implements Serializable {
 	private List<Review> reviews;
 
 	public Questionnaire() {
+		questions = new ArrayList<>();
 	}
 
 	public int getQuestionnaireId() {

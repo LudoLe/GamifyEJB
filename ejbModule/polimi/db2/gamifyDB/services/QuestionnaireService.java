@@ -28,6 +28,7 @@ public class QuestionnaireService {
 	}
 	
 	public Questionnaire createQuestionnaire(String image, String name, Date date, List<String> questions) throws Exception{
+		System.out.println("createQuestionnaire");
 		Questionnaire questionnaire = new Questionnaire();
 		try{		   
 			questionnaire.setImage(image);
@@ -37,7 +38,8 @@ public class QuestionnaireService {
 			em.persist(questionnaire);
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert questionnaire");
-		}    
+		}
+		System.out.println("ok1");
 		try {
 			QuestionService questionService = new QuestionService();
 			for(String question : questions) {
@@ -45,6 +47,7 @@ public class QuestionnaireService {
 				em.persist(q);
 			}
 			em.flush();
+			System.out.println("ok2");
 	        return questionnaire;
 		} catch (Exception e) {
 			em.clear();
