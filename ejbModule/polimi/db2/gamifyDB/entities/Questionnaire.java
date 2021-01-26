@@ -46,7 +46,7 @@ public class Questionnaire implements Serializable {
 	private List<Log> logs;
 
 	//bi-directional many-to-one association to Question
-	@OneToMany(mappedBy="questionnaire", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="questionnaire", fetch = FetchType.LAZY)
 	private List<Question> questions;
 
 	//bi-directional many-to-one association to Review
