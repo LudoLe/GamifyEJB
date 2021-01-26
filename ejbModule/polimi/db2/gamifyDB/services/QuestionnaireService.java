@@ -2,12 +2,10 @@ package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-import javax.servlet.http.HttpServletResponse;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Log;
 import polimi.db2.gamifyDB.entities.Question;
 import polimi.db2.gamifyDB.entities.Questionnaire;
@@ -30,6 +28,7 @@ public class QuestionnaireService {
 	}
 	
 	public Questionnaire createQuestionnaire(String image, String name, Date date, List<String> questions) throws Exception{
+		System.out.println("createQuestionnaire");
 		Questionnaire questionnaire = new Questionnaire();
 		try{		   
 			questionnaire.setImage(image);
@@ -39,7 +38,8 @@ public class QuestionnaireService {
 			em.persist(questionnaire);
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert questionnaire");
-		}    
+		}
+		System.out.println("ok1");
 		try {
 			QuestionService questionService = new QuestionService();
 			for(String question : questions) {
@@ -47,6 +47,7 @@ public class QuestionnaireService {
 				em.persist(q);
 			}
 			em.flush();
+			System.out.println("ok2");
 	        return questionnaire;
 		} catch (Exception e) {
 			em.clear();
@@ -77,14 +78,21 @@ public class QuestionnaireService {
 		param.append('%');
 		param.append(name);
 		param.append('%');
-		String queryString = "SELECT q FROM Questionnaire q WHERE q.name like ?1";
-		
-		if(forDeletion) queryString += " AND q.datetime < CURRENT_DATE";
-		
-		return em.createQuery(queryString, Questionnaire.class)
-				.setMaxResults(10)
-                .setParameter(1, param.toString())
-                .getResultList();
+		List<Questionnaire> ret;
+		if(forDeletion) {
+			@SuppressWarnings("unchecked")
+			List<Questionnaire> resultList = em.createNamedQuery("Questionnaire.findByNameBeforeToday").setMaxResults(10)
+					.setParameter(1, param.toString())
+					.getResultList();
+			ret =  resultList;
+		}else {
+			@SuppressWarnings("unchecked")
+			List<Questionnaire> resultList = em.createNamedQuery("Questionnaire.findByName").setMaxResults(10)
+            .setParameter(1, param.toString())
+            .getResultList();
+			ret =  resultList;
+		}
+		return ret;
 }
 	
 	public List<User> getCanceledUsers(int id) throws Exception{
@@ -109,12 +117,16 @@ public class QuestionnaireService {
 		String date=simpleDateFormat.format(today);
 		Date todate=simpleDateFormat.parse(date);
 
+
 		
 		 return em
 		                .createNamedQuery("Questionnaire.getByDate", Questionnaire.class)
 		                .setParameter(1, todate).getResultList().stream().findFirst().orElse(null);
-		                }
+		    }
 		
+
+
+		 
 		    
 		
 
@@ -146,4 +158,3 @@ public class QuestionnaireService {
 
 	
 }
-

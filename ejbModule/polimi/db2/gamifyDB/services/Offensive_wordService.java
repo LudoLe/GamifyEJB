@@ -30,15 +30,12 @@ public class Offensive_wordService{
 	
 	public void createOffensive_word(String word) throws Exception{
 		try{
-			
-		   Offensive_word offensiveWord=new Offensive_word();
+			Offensive_word offensiveWord=new Offensive_word();
+			offensiveWord.setWord(word);
 		   
-		   offensiveWord.setWord(word);
-		   
-		     
-	        em.persist(offensiveWord);
-	        em.flush();
-	        return;
+			em.persist(offensiveWord);
+			em.flush();
+			return;
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert word");
 		}     

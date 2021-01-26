@@ -28,8 +28,15 @@ public class LogService {
 		    log.setDatetime(date);
 		    log.setQuestionnaire(questionnaire);
 		    log.setUser(user);
-		     
-	        em.persist(log);
+			user = em.merge(user);
+			List<Log> oldLogs = user.getLogs();
+			oldLogs.add(log);
+			user.setLogs(oldLogs);
+			questionnaire = em.merge(questionnaire);
+		    List<Log> newLogs = questionnaire.getLogs();
+		    newLogs.add(log);
+		    questionnaire.setLogs(newLogs);
+		    em.persist(log);
 	        em.flush();
 	        return log;
 		} catch (PersistenceException e) {
@@ -50,6 +57,6 @@ public class LogService {
 		} catch (PersistenceException e){
 			throw new Exception("Could not retrieve logs");
 		}
-		}
+	}
 
 }

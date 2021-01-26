@@ -1,6 +1,9 @@
 package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
+
+
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +12,11 @@ import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 import java.util.Date;
 import javax.ejb.EJB;
 import java.text.DateFormat;
@@ -76,7 +84,8 @@ public class ReviewService {
 			throw new Exception("Could not retrieve questions");	}
 
 	}
-	public List<Review> findAllToday() throws Exception{
+	
+	public List<Review> findTodayFirst(int maxResult) throws Exception{
 		List<Review> reviews = null;
 		try {
 			em.getEntityManagerFactory().getCache().evictAll();
@@ -86,7 +95,8 @@ public class ReviewService {
             String strEnd = strDate+" 23:59:59";
             Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strStart);
             Date end = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strEnd);
-			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end).getResultList();
+			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end)
+					.setMaxResults(maxResult).getResultList();
 			
 			return reviews;
 		} catch (PersistenceException e) {

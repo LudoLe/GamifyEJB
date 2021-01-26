@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,9 @@ import java.util.List;
 @NamedQuery(name="Questionnaire.existsOnDate", query="SELECT COUNT(q) FROM Questionnaire q WHERE q.datetime=?1"),
 @NamedQuery(name="Questionnaire.getByDate", query="SELECT q FROM Questionnaire q WHERE q.datetime=?1"),
 @NamedQuery(name="Questionnaire.listOrdered", query="SELECT q FROM Questionnaire q ORDER BY q.datetime ASC"),
-@NamedQuery(name="Questionnaire.listPast", query="SELECT q FROM Questionnaire q WHERE q.datetime < CURRENT_DATE ORDER BY q.datetime ASC")
+@NamedQuery(name="Questionnaire.listPast", query="SELECT q FROM Questionnaire q WHERE q.datetime < CURRENT_DATE ORDER BY q.datetime ASC"),
+@NamedQuery(name="Questionnaire.findByName", query="SELECT q FROM Questionnaire q WHERE q.name LIKE ?1"),
+@NamedQuery(name="Questionnaire.findByNameBeforeToday", query="SELECT q FROM Questionnaire q WHERE q.name LIKE ?1 AND q.datetime < CURRENT_DATE"),
 }) 
 public class Questionnaire implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,6 +56,7 @@ public class Questionnaire implements Serializable {
 	private List<Review> reviews;
 
 	public Questionnaire() {
+		questions = new ArrayList<>();
 	}
 
 	public int getQuestionnaireId() {
