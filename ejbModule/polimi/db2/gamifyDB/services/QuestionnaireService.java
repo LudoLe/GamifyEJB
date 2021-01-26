@@ -56,16 +56,6 @@ public class QuestionnaireService {
 		}
 	}
 	
-	public List<Question> findAll() throws Exception{
-		List<Question> questions = null;
-	try {
-		questions = em.createNamedQuery("Answer.list", Question.class).getResultList();
-		return questions;
-	} catch (PersistenceException e) {
-		throw new Exception("Could not retrieve questions");
-	}
-	}
-	
 	public boolean exists(Date date) {
 	try {
 		return em.createNamedQuery("Questionnaire.existsOnDate", Long.class).setParameter(1, date).getSingleResult() != 0;
@@ -110,7 +100,10 @@ public class QuestionnaireService {
 	  return em.find(Questionnaire.class, questionnaireId);
 	}
 	
+	
+
 	public Questionnaire findByDate(Date today) throws Exception{
+	
 		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String date=simpleDateFormat.format(today);
@@ -119,10 +112,11 @@ public class QuestionnaireService {
 		
 		 return em
 		                .createNamedQuery("Questionnaire.getByDate", Questionnaire.class)
-		                .setParameter(1, todate)
-		                .getSingleResult();
+		                .setParameter(1, todate).getResultList().stream().findFirst().orElse(null);
+		                }
+		
 		    
-		}
+		
 
 	
 	public boolean delete(int questionnaireId) throws Exception{

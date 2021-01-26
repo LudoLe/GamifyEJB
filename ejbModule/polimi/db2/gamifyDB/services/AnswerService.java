@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Question;
-import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
 
@@ -28,7 +27,11 @@ public class AnswerService {
 		    Answer answer = new Answer();			
 		    answer.setQuestion(question);
 	        answer.setReview(review);
-	        answer.setContent(content);	        
+	        answer.setContent(content);	  
+	        question = em.merge(question);
+	        List<Answer> oldAnswers = question.getAnswers();
+	        oldAnswers.add(answer);
+	        question.setAnswers(oldAnswers);
 	        em.persist(answer);
 	        return answer;
 		} catch (PersistenceException e) {
@@ -36,10 +39,16 @@ public class AnswerService {
 		}     
 	}
 	
-	public void createAnswers(List<Answer> answers) throws Exception{
+	public void createAnswers(List<Answer> answers, Review review) throws Exception{
 		try{
-			for(Answer answer : answers){ this.createAnswer(answer.getContent(), answer.getQuestion(), answer.getReview()); }
-	          em.flush();
+			for(Answer answer : answers){ 
+				answer.setReview(review);
+				Question question = em.merge(answer.getQuestion());
+		        List<Answer> oldAnswers = question.getAnswers();
+		        oldAnswers.add(answer);
+		        question.setAnswers(oldAnswers);
+				em.persist(answer); 
+				}
 		} catch (PersistenceException e) {
 			throw new Exception("Could not insert question");
 		}     
@@ -50,7 +59,7 @@ public class AnswerService {
 	public List<Answer> findAll() throws Exception {
 		List<Answer> answers = null;
 	try {
-		answers = em.createNamedQuery("Answer.findALl", Answer.class).getResultList();
+		answers = em.createNamedQuery("Answer.findAll", Answer.class).getResultList();
 		return answers;
 	} catch (PersistenceException e) {
 		throw new Exception("Could not retrieve answers");

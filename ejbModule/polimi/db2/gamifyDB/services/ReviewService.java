@@ -5,14 +5,21 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import polimi.db2.gamifyDB.entities.User;
+import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import java.util.List;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.ejb.EJB;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 @Stateless
 public class ReviewService {
+	@EJB(name = "gamifyDB.services/UserService")
+	private UserService userService;
+	@EJB(name = "gamifyDB.services/AnswerService")
+	private AnswerService answerService;
 	
 	@PersistenceContext(unitName = "GamifyEJB")
 	private EntityManager em;
@@ -21,22 +28,39 @@ public class ReviewService {
 	public ReviewService(){
 	}
 	
-	public Review createReview(int canAccessAge, int canAccessSex,Date date, String expertise, User user, Questionnaire questionnaire) throws Exception{
+	public Review createReview(int canAccessAge, int canAccessSex, Date date, String expertise, User user, Questionnaire questionnaire, List<Answer> answers, String sex, Date birth) throws Exception{
+		Review review = null;
 		try{
-		    Review review= new Review();	 		  
+			System.out.println("createReview");
+			review= new Review();	 		  
 		    review.setCanAccessAge(canAccessAge);
 		    review.setCanAccessSex(canAccessSex);
 		    review.setDatetime(date);
 		    review.setExpertise(expertise);
 		    review.setQuestionnaire(questionnaire);
 		    review.setUser(user);
-		   
+	        review.setAnswers(answers);
+
+	        answerService.createAnswers(answers, review);
+	        user = em.merge(user);
+		    user.setSex(sex);
+		    user.setBirth(birth);
+		    List<Review> oldReviews = user.getReviews();
+		    oldReviews.add(review);
+		    user.setReviews(oldReviews);
+		    questionnaire = em.merge(questionnaire);
+		    oldReviews = questionnaire.getReviews();
+		    oldReviews.add(review);
+		    questionnaire.setReviews(oldReviews);
 	        em.persist(review);
+
 	        em.flush();
-	        return review;
 		} catch (PersistenceException e) {
+			em.clear();
 			throw new Exception("Could not insert question");
-		}     
+		}
+
+        return review;
 	}
 	
 	public Review find(int reviewId) throws Exception{
@@ -45,12 +69,32 @@ public class ReviewService {
 	
 	public List<Review> findAll() throws Exception{
 		List<Review> reviews = null;
-	try {
-		reviews = em.createNamedQuery("Review.findAll", Review.class).getResultList();
-		return reviews;
-	} catch (PersistenceException e) {
-		throw new Exception("Could not retrieve questions");	}
+		try {
+			reviews = em.createNamedQuery("Review.findAll", Review.class).getResultList();
+			return reviews;
+		} catch (PersistenceException e) {
+			throw new Exception("Could not retrieve questions");	}
 
+	}
+	public List<Review> findAllToday() throws Exception{
+		List<Review> reviews = null;
+		try {
+			em.getEntityManagerFactory().getCache().evictAll();
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate = dateFormat.format(new Date());
+            String strStart = strDate+" 00:00:00";
+            String strEnd = strDate+" 23:59:59";
+            Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strStart);
+            Date end = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strEnd);
+			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end).getResultList();
+			
+			return reviews;
+		} catch (PersistenceException e) {
+			throw new Exception("Could not retrieve questions");
+		}
+
+	}
 }
 
-}
+
+
