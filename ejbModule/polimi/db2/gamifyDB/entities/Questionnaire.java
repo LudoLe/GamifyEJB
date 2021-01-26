@@ -20,7 +20,9 @@ import java.util.List;
 @NamedQuery(name="Questionnaire.existsOnDate", query="SELECT COUNT(q) FROM Questionnaire q WHERE q.datetime=?1"),
 @NamedQuery(name="Questionnaire.getByDate", query="SELECT q FROM Questionnaire q WHERE q.datetime=?1"),
 @NamedQuery(name="Questionnaire.listOrdered", query="SELECT q FROM Questionnaire q ORDER BY q.datetime ASC"),
-@NamedQuery(name="Questionnaire.listPast", query="SELECT q FROM Questionnaire q WHERE q.datetime < CURRENT_DATE ORDER BY q.datetime ASC")
+@NamedQuery(name="Questionnaire.listPast", query="SELECT q FROM Questionnaire q WHERE q.datetime < CURRENT_DATE ORDER BY q.datetime ASC"),
+@NamedQuery(name="Questionnaire.findByName", query="SELECT q FROM Questionnaire q WHERE q.name LIKE ?1"),
+@NamedQuery(name="Questionnaire.findByNameBeforeToday", query="SELECT q FROM Questionnaire q WHERE q.name LIKE ?1 AND q.datetime < CURRENT_DATE"),
 }) 
 public class Questionnaire implements Serializable {
 	private static final long serialVersionUID = 1L;

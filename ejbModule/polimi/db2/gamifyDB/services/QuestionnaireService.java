@@ -88,14 +88,21 @@ public class QuestionnaireService {
 		param.append('%');
 		param.append(name);
 		param.append('%');
-		String queryString = "SELECT q FROM Questionnaire q WHERE q.name like ?1";
-		
-		if(forDeletion) queryString += " AND q.datetime < CURRENT_DATE";
-		
-		return em.createQuery(queryString, Questionnaire.class)
-				.setMaxResults(10)
-                .setParameter(1, param.toString())
-                .getResultList();
+		List<Questionnaire> ret;
+		if(forDeletion) {
+			@SuppressWarnings("unchecked")
+			List<Questionnaire> resultList = em.createNamedQuery("Questionnaire.findByNameBeforeToday").setMaxResults(10)
+					.setParameter(1, param.toString())
+					.getResultList();
+			ret =  resultList;
+		}else {
+			@SuppressWarnings("unchecked")
+			List<Questionnaire> resultList = em.createNamedQuery("Questionnaire.findByName").setMaxResults(10)
+            .setParameter(1, param.toString())
+            .getResultList();
+			ret =  resultList;
+		}
+		return ret;
 }
 	
 	public List<User> getCanceledUsers(int id) throws Exception{

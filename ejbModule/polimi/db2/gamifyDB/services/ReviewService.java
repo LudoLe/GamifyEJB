@@ -97,4 +97,23 @@ public class ReviewService {
 		}
 
 	}
+	public List<Review> findTodayFirst(int maxResult) throws Exception{
+		List<Review> reviews = null;
+		try {
+			em.getEntityManagerFactory().getCache().evictAll();
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate = dateFormat.format(new Date());
+            String strStart = strDate+" 00:00:00";
+            String strEnd = strDate+" 23:59:59";
+            Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strStart);
+            Date end = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strEnd);
+			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end)
+					.setMaxResults(maxResult).getResultList();
+			
+			return reviews;
+		} catch (PersistenceException e) {
+			throw new Exception("Could not retrieve questions");
+		}
+
+	}
 }
