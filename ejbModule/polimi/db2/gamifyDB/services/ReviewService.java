@@ -6,6 +6,7 @@ import javax.persistence.PersistenceException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import polimi.db2.gamifyDB.entities.User;
 import polimi.db2.gamifyDB.entities.Answer;
@@ -29,6 +30,18 @@ public class ReviewService {
 	
 
 	public ReviewService(){
+	}
+	
+	public boolean checkIfAlreadySubmitted(User user, Questionnaire questionnaire) throws Exception{
+		try {
+			//em.getEntityManagerFactory().getCache().evictAll();
+			int res = 0;
+			res = em.createNamedQuery("Review.findIfUserAlreadySubmitted", Integer.class).setParameter(1, user).setParameter(2, questionnaire).setMaxResults(1).getSingleResult();
+			return res >= 1;
+		} catch (NoResultException e) {
+			return true;
+		}
+
 	}
 	
 	public Review createReview(int canAccessAge, int canAccessSex, Date date, String expertise, User user, Questionnaire questionnaire, List<Answer> answers, String sex, Date birth) throws Exception{
@@ -82,7 +95,7 @@ public class ReviewService {
 	public List<Review> findAllToday() throws Exception{
 		List<Review> reviews = null;
 		try {
-			em.getEntityManagerFactory().getCache().evictAll();
+			//em.getEntityManagerFactory().getCache().evictAll();
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             String strDate = dateFormat.format(new Date());
             String strStart = strDate+" 00:00:00";
@@ -100,7 +113,7 @@ public class ReviewService {
 	public List<Review> findTodayFirst(int maxResult) throws Exception{
 		List<Review> reviews = null;
 		try {
-			em.getEntityManagerFactory().getCache().evictAll();
+			//em.getEntityManagerFactory().getCache().evictAll();
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             String strDate = dateFormat.format(new Date());
             String strStart = strDate+" 00:00:00";

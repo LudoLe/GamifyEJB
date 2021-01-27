@@ -19,6 +19,7 @@ import java.util.List;
 @NamedQuery(name="Review.findAll", query="SELECT r FROM Review r"),
 @NamedQuery(name="Review.findById", query="SELECT r FROM Review r WHERE r.reviewId=?1"),
 @NamedQuery(name="Review.findByUserAndQuestionnaire", query="SELECT r FROM Review r WHERE r.questionnaire=?1 AND r.user=?2"),
+@NamedQuery(name="Review.findIfUserAlreadySubmitted", query="select case when exists(select r from Review r where r.user = ?1 AND r.questionnaire = ?2) then 1 else 0 end from Review r1"),
 @NamedQuery(name="Review.findAllOnDate", query="SELECT r FROM Review r WHERE r.datetime >= ?1 AND r.datetime <= ?2 ORDER BY r.datetime DESC")})
 
 public class Review implements Serializable {
