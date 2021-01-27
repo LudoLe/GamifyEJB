@@ -107,8 +107,11 @@ public class ReviewService {
             String strEnd = strDate+" 23:59:59";
             Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strStart);
             Date end = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(strEnd);
-			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end)
-					.setMaxResults(maxResult).getResultList();
+			
+			
+			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end).getResultList();
+			if(reivews.size > maxResult)
+			    reviews = reviews.subList(0, maxResult);
 			
 			return reviews;
 		} catch (PersistenceException e) {
