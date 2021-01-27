@@ -1,5 +1,8 @@
 package polimi.db2.gamifyDB.services;
 import javax.persistence.PersistenceException;
+
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
