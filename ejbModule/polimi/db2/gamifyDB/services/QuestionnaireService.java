@@ -13,8 +13,11 @@ import polimi.db2.gamifyDB.entities.Review;
 import polimi.db2.gamifyDB.entities.User;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -58,20 +61,31 @@ public class QuestionnaireService {
 	}
 	
 	public boolean exists(Date date) {
-	try {
-		return em.createNamedQuery("Questionnaire.existsOnDate", Long.class).setParameter(1, date).getSingleResult() != 0;
-	} catch (Exception e) {
-		return false;
+		try {
+			return em.createNamedQuery("Questionnaire.existsOnDate", Long.class).setParameter(1, date).getSingleResult() != 0;
+		} catch (Exception e) {
+			return false;
+		}
 	}
-}
 	
-	public List<User> getCompletedUsers(int id) throws Exception{
+	public Set<User> getCompletedUsers(int id) throws Exception{
 		Questionnaire questionnaire = this.find(id);
 		if(questionnaire == null) return null;
 		List<Review> reviews = questionnaire.getReviews();
-		List<User> users = reviews.stream().map(review -> review.getUser()).distinct().collect(Collectors.toList());
-		return users;
-}
+		Set<User> users2 = new HashSet<User>();
+		if(reviews == null) {
+			System.out.println("reviews nullaaaa");
+		}else {
+			for(Review review: reviews) {
+				System.out.println(review.getUser());
+				users2.add(review.getUser());
+			}
+		}
+		/*
+		 * List<User> users = reviews.stream().map(review -> review.getUser()).distinct().collect(Collectors.toList());
+		*/
+		return users2;
+	}
 	
 	public List<Questionnaire> getQuestionnairesFill(String name, boolean forDeletion) throws Exception{
 		StringBuilder param = new StringBuilder();
@@ -95,13 +109,21 @@ public class QuestionnaireService {
 		return ret;
 }
 	
-	public List<User> getCanceledUsers(int id) throws Exception{
+	public Set<User> getCanceledUsers(int id) throws Exception{
 		Questionnaire questionnaire = this.find(id);
 		if(questionnaire == null) return null;
 		List<Log> logs = questionnaire.getLogs();
+		/*
 		List<User> users = logs.stream().map(log -> log.getUser()).distinct().collect(Collectors.toList());
-		return users;
-}
+		*/
+		Set<User> completed = getCompletedUsers(id);
+		Set<User> users2 = new HashSet<User>();
+		for(Log log: logs) {
+			if(!completed.contains(log.getUser()))
+				users2.add(log.getUser());
+		}
+		return users2;
+	}
 	
 	
 	public Questionnaire find(int questionnaireId) throws Exception{

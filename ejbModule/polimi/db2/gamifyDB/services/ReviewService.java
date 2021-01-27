@@ -35,8 +35,7 @@ public class ReviewService {
 	public boolean checkIfAlreadySubmitted(User user, Questionnaire questionnaire) throws Exception{
 		try {
 			//em.getEntityManagerFactory().getCache().evictAll();
-			int res = 0;
-			res = em.createNamedQuery("Review.findIfUserAlreadySubmitted", Integer.class).setParameter(1, user).setParameter(2, questionnaire).setMaxResults(1).getSingleResult();
+			long res = (long) em.createNamedQuery("Review.findIfUserAlreadySubmitted").setParameter(1, user).setParameter(2, questionnaire).setMaxResults(1).getSingleResult() ;
 			return res >= 1;
 		} catch (NoResultException e) {
 			return true;
