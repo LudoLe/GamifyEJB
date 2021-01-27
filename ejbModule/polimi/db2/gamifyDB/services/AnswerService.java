@@ -1,6 +1,9 @@
 package polimi.db2.gamifyDB.services;
 
 import javax.persistence.PersistenceException;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,8 +38,9 @@ public class AnswerService {
 	        em.persist(answer);
 	        return answer;
 		} catch (PersistenceException e) {
-			throw new Exception("Could not insert question");
-		}     
+			System.out.println("Eccezione: "+e.getMessage());
+			throw new Exception("Could not insert answer");
+		}
 	}
 	
 	public void createAnswers(List<Answer> answers, Review review) throws Exception{
@@ -48,10 +52,13 @@ public class AnswerService {
 		        oldAnswers.add(answer);
 		        question.setAnswers(oldAnswers);
 				em.persist(answer); 
-				}
+			}
 		} catch (PersistenceException e) {
-			throw new Exception("Could not insert question");
-		}     
+			throw new Exception("Could not insert answer");
+		}  catch (Exception e) {
+			System.out.println("Eccezioneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+			throw new Exception("Could not insert answer");
+		}
 	}
 
 

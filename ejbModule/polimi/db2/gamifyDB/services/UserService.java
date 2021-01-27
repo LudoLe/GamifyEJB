@@ -94,6 +94,16 @@ public class UserService{
 	       
 
 	}
+	public User blockUser(User user) throws Exception {
+		try {
+			user.setBlocked(1);
+			em.merge(user);
+			em.flush();
+			return user;
+		}catch (PersistenceException e) {
+			throw new Exception("Could not block user");
+		}
+	}
 	
 	public void getUserWhoSubmitted(){}
 	public void getUserWhoCancelled(){}

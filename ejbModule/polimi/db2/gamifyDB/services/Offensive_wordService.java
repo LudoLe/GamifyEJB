@@ -20,9 +20,9 @@ public class Offensive_wordService{
 	public Offensive_wordService(){
 	}
 	
-	public List<String> getWords() throws Exception {
+	public List<Offensive_word> getWords() throws Exception {
 		try {
-			return em.createNamedQuery("Offensive_word.getWords", Offensive_word.class).getResultList().stream().map(arg0 -> arg0.getWord()).collect(Collectors.toList()); 
+			return em.createNamedQuery("Offensive_word.findAll", Offensive_word.class).getResultList();
 		} catch (PersistenceException e) {
 			throw new Exception("Could not retrieve offensive words");
 		}
