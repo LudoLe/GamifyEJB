@@ -25,13 +25,13 @@ public class QuestionService {
 		    question.setContent(content);
 		    question.setQuestionnaire(questionnaire);
 		    question.setAnswers(null);
-		    /*
+		   
 		    System.out.println("half createQuestion");
 		    try {
 		    	questionnaire = em.merge(questionnaire);
 		    }catch(Exception e) {
 		    	System.out.println(e.getMessage());
-		    }*/
+		    }
 		    System.out.println(questionnaire.getQuestions());
 		    System.out.println("half createQuestion");
 		    List<Question> oldQuestions = questionnaire.getQuestions();
