@@ -110,7 +110,7 @@ public class ReviewService {
 			
 			
 			reviews = em.createNamedQuery("Review.findAllOnDate", Review.class).setParameter(1, start).setParameter(2, end).getResultList();
-			if(reivews.size > maxResult)
+			if(reviews.size() > maxResult)
 			    reviews = reviews.subList(0, maxResult);
 			
 			return reviews;
